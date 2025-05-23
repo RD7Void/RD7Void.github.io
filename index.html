@@ -640,40 +640,44 @@
             }
         });
 
-        // Função para inicializar música
-        function initMusic() {
-            // Como não podemos usar arquivos externos específicos, vamos simular
-            // Em um ambiente real, você colocaria o caminho para o arquivo de música
-            console.log('🎵 Música iniciada: Acústico 1Kilo - Deixe-me Ir');
-            
-            // Simular controle de música
-            currentMusic = {
-                playing: true,
-                volume: musicVolume
-            };
-        }
+        // Substitua a função initMusic por esta:
+function initMusic() {
+    const music = document.getElementById('backgroundMusic');
+    music.volume = musicVolume;
+    
+    // Tenta reproduzir (pode precisar de interação do usuário em alguns navegadores)
+    const playPromise = music.play();
+    
+    if (playPromise !== undefined) {
+        playPromise.catch(error => {
+            console.log('Reprodução automática prevenida pelo navegador:', error);
+            // Mostra um botão para o usuário iniciar manualmente
+            alert('Clique em OK e depois no botão de música para iniciar a trilha sonora.');
+        });
+    }
+    
+    currentMusic = music;
+}
 
-        // Função para controlar música
-        function toggleMusic() {
-            const btn = document.getElementById('playPauseBtn');
-            if (currentMusic && currentMusic.playing) {
-                btn.textContent = '⏸️';
-                currentMusic.playing = false;
-                console.log('🎵 Música pausada');
-            } else {
-                btn.textContent = '🎵';
-                if (currentMusic) currentMusic.playing = true;
-                console.log('🎵 Música retomada');
-            }
-        }
+// Atualize a função toggleMusic:
+function toggleMusic() {
+    const btn = document.getElementById('playPauseBtn');
+    if (currentMusic.paused) {
+        currentMusic.play();
+        btn.textContent = '🎵';
+    } else {
+        currentMusic.pause();
+        btn.textContent = '⏸️';
+    }
+}
 
-        // Função para alterar volume
-        function changeVolume(delta) {
-            if (currentMusic) {
-                currentMusic.volume = Math.max(0, Math.min(1, currentMusic.volume + delta));
-                console.log(`🔊 Volume: ${Math.round(currentMusic.volume * 100)}%`);
-            }
-        }
+// Atualize a função changeVolume:
+function changeVolume(delta) {
+    if (currentMusic) {
+        currentMusic.volume = Math.max(0, Math.min(1, currentMusic.volume + delta));
+        console.log(`🔊 Volume: ${Math.round(currentMusic.volume * 100)}%`);
+    }
+}
 
         // Função para carregar fotos da pasta
         async function loadPhotos() {
