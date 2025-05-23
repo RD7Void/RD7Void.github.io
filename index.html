@@ -387,8 +387,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #666;
-            font-style: italic;
             animation: photoAppear 0.8s ease-out;
             animation-fill-mode: both;
         }
@@ -585,7 +583,7 @@
 
     <!-- Audio elemento para música -->
     <audio id="backgroundMusic" loop>
-        <source src="https://RD7Void.github.io/music.mp3" type="audio/mpeg">
+        <source src="https://www.soundjay.com/misc/sounds/romantic-music.mp3" type="audio/mpeg">
         <!-- Fallback para quando não há arquivo específico -->
     </audio>
 
@@ -680,141 +678,65 @@
         // Função para carregar fotos da pasta
         async function loadPhotos() {
             const photoGrid = document.getElementById('photoGrid');
-            const supportedFormats = ['.jpg', '.jpeg', '.png', '.gif', '.webp'];
-            const commonPhotoNames = [
-    'img1', 'img2', 'img3', 'img4', 'img5',
-    'img6', 'img7', 'img8', 'img9', 'img10',
-    'img11', 'img12', 'img13', 'img14', 'img15',
-    'img16', 'img17', 'img18', 'img19', 'img20',
-    'img21', 'img22', 'img23', 'img24', 'img25'
-];
-
-
+            
             // Limpar grid atual
             photoGrid.innerHTML = '';
 
-            // Tentar carregar fotos com nomes comuns
-            let photosLoaded = 0;
-            const maxPhotos = 8;
+            // Array de URLs de fotos de exemplo (substitua por suas próprias fotos)
+            const photoUrls = [
+    'https://rd7void.github.io/fotos/img1.jpg',
+    'https://rd7void.github.io/fotos/img2.jpg',
+    'https://rd7void.github.io/fotos/img3.jpg',
+    'https://rd7void.github.io/fotos/img4.jpg',
+    'https://rd7void.github.io/fotos/img5.jpg',
+    'https://rd7void.github.io/fotos/img6.jpg',
+    'https://rd7void.github.io/fotos/img7.jpg',
+    'https://rd7void.github.io/fotos/img8.jpg',
+    'https://rd7void.github.io/fotos/img9.jpg',
+    'https://rd7void.github.io/fotos/img10.jpg',
+    'https://rd7void.github.io/fotos/img11.jpg',
+    'https://rd7void.github.io/fotos/img12.jpg',
+    'https://rd7void.github.io/fotos/img13.jpg',
+    'https://rd7void.github.io/fotos/img14.jpg',
+    'https://rd7void.github.io/fotos/img15.jpg',
+    'https://rd7void.github.io/fotos/img16.jpg',
+    'https://rd7void.github.io/fotos/img17.jpg',
+    'https://rd7void.github.io/fotos/img18.jpg',
+    'https://rd7void.github.io/fotos/img19.jpg',
+    'https://rd7void.github.io/fotos/img20.jpg',
+    'https://rd7void.github.io/fotos/img21.jpg',
+    'https://rd7void.github.io/fotos/img22.jpg',
+    'https://rd7void.github.io/fotos/img23.jpg',
+    'https://rd7void.github.io/fotos/img24.jpg',
+    'https://rd7void.github.io/fotos/img25.jpg'
+];
 
-            for (let i = 0; i < maxPhotos; i++) {
+            // Carregar cada foto
+            photoUrls.forEach((url, index) => {
                 const photoItem = document.createElement('div');
                 photoItem.className = 'photo-item';
-                photoItem.style.animationDelay = `${i * 0.1}s`;
+                photoItem.style.animationDelay = `${index * 0.1}s`;
 
                 // Adicionar spinner de loading
                 photoItem.innerHTML = '<div class="loading-spinner"></div>';
                 photoGrid.appendChild(photoItem);
 
-                // Tentar carregar foto
-                await tryLoadPhoto(photoItem, i, commonPhotoNames, supportedFormats);
-            }
-
-            // Se nenhuma foto foi carregada, mostrar placeholders românticos
-            if (photosLoaded === 0) {
-                createRomanticPlaceholders();
-            }
-        }
-
-        // Função para tentar carregar uma foto específica
-        async function tryLoadPhoto(photoItem, index, names, formats) {
-            let photoLoaded = false;
-
-            // Tentar diferentes combinações de nomes e formatos
-            for (const name of names) {
-                if (photoLoaded) break;
-                
-                for (const format of formats) {
-                    try {
-                        const photoPath = `fotos/${name}${format}`;
-                        const img = new Image();
-                        
-                        img.onload = function() {
-                            photoItem.innerHTML = '';
-                            photoItem.appendChild(img);
-                            photoLoaded = true;
-                            
-                            // Adicionar efeito de hover especial
-                            img.addEventListener('click', () => {
-                                createHeartBurst(photoItem);
-                            });
-                        };
-                        
-                        img.onerror = function() {
-                            // Continuar tentando outros formatos
-                        };
-                        
-                        img.src = photoPath;
-                        
-                        // Aguardar um pouco para ver se carrega
-                        await new Promise(resolve => setTimeout(resolve, 100));
-                        
-                        if (photoLoaded) break;
-                        
-                    } catch (error) {
-                        console.log(`Tentativa falhou para: fotos/${name}${format}`);
-                    }
-                }
-            }
-
-            // Se não conseguiu carregar nenhuma foto, criar placeholder
-            if (!photoLoaded) {
-                setTimeout(() => {
-                    photoItem.innerHTML = createPhotoPlaceholder(index);
-                }, 500 + (index * 100));
-            }
-        }
-
-        // Função para criar placeholders românticos
-        function createRomanticPlaceholders() {
-            const photoGrid = document.getElementById('photoGrid');
-            const placeholders = [
-                { icon: '💕', text: 'Nosso primeiro encontro' },
-                { icon: '🌹', text: 'Quando você sorriu para mim' },
-                { icon: '🌟', text: 'A noite que mudou tudo' },
-                { icon: '💖', text: 'Nosso primeiro beijo' },
-                { icon: '🏠', text: 'Nossa casa dos sonhos' },
-                { icon: '💍', text: 'O futuro que planejamos' },
-                { icon: '🌙', text: 'Noites conversando até tarde' },
-                { icon: '☀️', text: 'Manhãs ao seu lado' }
-            ];
-
-            photoGrid.innerHTML = '';
-            
-            placeholders.forEach((placeholder, index) => {
-                const photoItem = document.createElement('div');
-                photoItem.className = 'photo-item';
-                photoItem.style.animationDelay = `${index * 0.1}s`;
-                photoItem.innerHTML = `
-                    <div style="text-align: center; padding: 2rem;">
-                        <div style="font-size: 3rem; margin-bottom: 1rem;">${placeholder.icon}</div>
-                        <p style="color: #2c3e50; font-weight: bold; font-size: 1.1rem;">${placeholder.text}</p>
-                    </div>
-                `;
-                
-                // Adicionar efeito especial ao clicar
-                photoItem.addEventListener('click', () => {
-                    createHeartBurst(photoItem);
-                });
-                
-                photoGrid.appendChild(photoItem);
+                // Carregar a foto
+                const img = new Image();
+                img.onload = function() {
+                    photoItem.innerHTML = '';
+                    const imgElement = document.createElement('img');
+                    imgElement.src = url;
+                    imgElement.alt = `Foto ${index + 1}`;
+                    photoItem.appendChild(imgElement);
+                    
+                    // Adicionar efeito de hover especial
+                    photoItem.addEventListener('click', () => {
+                        createHeartBurst(photoItem);
+                    });
+                };
+                img.src = url;
             });
-        }
-
-        // Função para criar placeholder individual
-        function createPhotoPlaceholder(index) {
-            const messages = [
-                '📷 Memória especial #1',
-                '🎞️ Nosso momento único',
-                '📸 Lembrança do coração',
-                '🖼️ Foto que guardo na alma',
-                '📷 Instante eternizado',
-                '🎯 Clique do amor',
-                '📸 Registro da felicidade',
-                '🖼️ Quadro da nossa história'
-            ];
-            
-            return `<p style="text-align: center; color: #666; font-style: italic; padding: 2rem;">${messages[index] || '📷 Nossa foto especial'}</p>`;
         }
 
         // Função para criar explosão de corações
